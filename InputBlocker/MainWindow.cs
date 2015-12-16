@@ -14,12 +14,12 @@ namespace InputBlocker
     public partial class MainWindow : Form
     {
 
-        [DllImport("user32.dll")]
-        static extern void BlockInput(bool Block);
+        private AppCore kernel;
 
         public MainWindow()
         {
             InitializeComponent();
+            kernel = new AppCore();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -38,7 +38,7 @@ namespace InputBlocker
         private void button1_Click(object sender, EventArgs e)
         {
             toNotifyIcon();
-            BlockInput(true);
+            kernel.BlockAllInput();
         }
 
         private void toNotifyIcon()
@@ -90,7 +90,7 @@ namespace InputBlocker
 
         private void MenuStrip0_Click(object sender, EventArgs e)
         {
-            BlockInput(true);
+            kernel.BlockAllInput();
         }
 
         private void MainWindow_Shown(object sender, EventArgs e)
