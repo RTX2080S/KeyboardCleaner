@@ -10,11 +10,13 @@ using System.Windows.Forms;
 
 namespace InputBlocker
 {
-  
+
     public partial class MainWindow : Form
     {
 
         private AppCore kernel;
+        private NotifyIcon myNotifyIcon = null;
+        private bool notifyIconCreated = false;
 
         public MainWindow()
         {
@@ -26,9 +28,6 @@ namespace InputBlocker
         {
             InitUI();
         }
-
-        private NotifyIcon myNotifyIcon = null;
-        private bool notifyIconCreated = false;
 
         private void InitUI()
         {
@@ -46,18 +45,13 @@ namespace InputBlocker
             this.WindowState = FormWindowState.Minimized;
             this.Hide();
             if (!notifyIconCreated)
-                createNotifyIcon();
+                myNotifyIcon = getNotifyIcon();
             else
                 myNotifyIcon.Visible = true;
         }
 
-        private void createNotifyIcon()
+        private NotifyIcon getNotifyIcon()
         {
-            myNotifyIcon = new NotifyIcon()
-            {
-                Icon = Properties.Resources.mainIcon,
-            };
-
             ContextMenu c = new ContextMenu();
             c.MenuItems.Add("Block Now");
             c.MenuItems[0].Click += MenuStrip0_Click;
@@ -65,15 +59,16 @@ namespace InputBlocker
             c.MenuItems[1].Click += MenuStrip2_Click;
             c.MenuItems.Add("Exit");
             c.MenuItems[2].Click += MenuStrip1_Click;
-            myNotifyIcon.ContextMenu = c;
-            myNotifyIcon.MouseDoubleClick += myNotifyIcon_MouseDoubleClick;
-            myNotifyIcon.Visible = true;            
-        }
 
-        private void MenuStrip2_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(this, ProductName + " [Version " + ProductVersion + "] \n\n"
-                + CompanyName, ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            NotifyIcon resultIcon = new NotifyIcon()
+            {
+                Icon = Properties.Resources.mainIcon,
+                ContextMenu = c,
+                Visible = true
+            };
+
+            resultIcon.MouseDoubleClick += myNotifyIcon_MouseDoubleClick;
+            return resultIcon;
         }
 
         void myNotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -92,7 +87,13 @@ namespace InputBlocker
         {
             kernel.BlockAllInput();
         }
-
+        
+        private void MenuStrip2_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(this, ProductName + " [Version " + ProductVersion + "] \n\n"
+                + CompanyName, ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        
         private void MainWindow_Shown(object sender, EventArgs e)
         {
             toNotifyIcon();
