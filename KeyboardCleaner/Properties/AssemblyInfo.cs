@@ -7,12 +7,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Keyboard cleaner for 辰辰")]
-[assembly: AssemblyDescription("A app enables you to block user input for mouse and keyboard cleaning, specially made for 辰辰's happy birhtday!")]
+[assembly: AssemblyDescription("An app enables you to block user input for mouse and keyboard cleaning, specially made for 辰辰's happy birthday!")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("小阿狸")]
 [assembly: AssemblyProduct("Keyboard cleaner for 辰辰")]
 [assembly: AssemblyCopyright("Copyright © 小阿狸 2016")]
-[assembly: AssemblyTrademark("Alien")]
+[assembly: AssemblyTrademark("Ali")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
