@@ -19,7 +19,7 @@ namespace InputBlocker
         public MainWindow()
         {
             InitializeComponent();
-            this.Text = ProductName;
+            Text = ProductName;
             kernel = new AppCore();
         }
 
@@ -44,12 +44,12 @@ namespace InputBlocker
 
         private void toNotifyIcon()
         {
-            this.WindowState = FormWindowState.Minimized;
-            this.Hide();
             if (!notifyIconCreated)
                 createNotifyIcon();
             else
                 myNotifyIcon.Visible = true;
+            WindowState = FormWindowState.Minimized;
+            Hide();
         }
 
         private void createNotifyIcon()
@@ -69,7 +69,7 @@ namespace InputBlocker
             c.MenuItems[3].Click += MenuStrip1_Click;
             myNotifyIcon.ContextMenu = c;
             myNotifyIcon.MouseDoubleClick += myNotifyIcon_MouseDoubleClick;
-            myNotifyIcon.Visible = true;
+            notifyIconCreated = myNotifyIcon.Visible = true;
         }
 
         private void MenuStrip2_Click(object sender, EventArgs e)
@@ -85,8 +85,8 @@ namespace InputBlocker
 
         void myNotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
+            Show();
+            WindowState = FormWindowState.Normal;
             myNotifyIcon.Visible = false;
         }
 
