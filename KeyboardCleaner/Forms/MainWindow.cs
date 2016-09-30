@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using InputBlocker.Controllers;
+using InputBlocker.Interfaces;
+using System;
 using System.Windows.Forms;
 
 namespace InputBlocker
@@ -13,14 +8,13 @@ namespace InputBlocker
 
     public partial class MainWindow : Form
     {
-
-        private AppCore kernel;
+        private ICoreController kernel;
+        private INotifyIconController myNotifyIcon;
 
         public MainWindow()
         {
             InitializeComponent();
-            Text = ProductName;
-            kernel = new AppCore();
+            kernel = new CoreController();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -28,12 +22,15 @@ namespace InputBlocker
             InitUI();
         }
 
-        private NotifyIcon myNotifyIcon = null;
-        private bool notifyIconCreated = false;
-
         private void InitUI()
         {
-            this.Icon = Properties.Resources.mainIcon;
+            Icon = Properties.Resources.mainIcon;
+            Text = ProductName;
+
+            // Initialize NotifyIcon
+            myNotifyIcon = new NotifyIconController();
+            myNotifyIcon.InitContextMenu(MenuStrip0_Click, MenuStrip2_Click, MenuStrip1_Click);
+            myNotifyIcon.InitNotifyIcon(Properties.Resources.mainIcon, myNotifyIcon_MouseDoubleClick);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -44,32 +41,9 @@ namespace InputBlocker
 
         private void toNotifyIcon()
         {
-            if (!notifyIconCreated)
-                createNotifyIcon();
-            else
-                myNotifyIcon.Visible = true;
+            myNotifyIcon.ShowNotifyIcon();
             WindowState = FormWindowState.Minimized;
             Hide();
-        }
-
-        private void createNotifyIcon()
-        {
-            myNotifyIcon = new NotifyIcon()
-            {
-                Icon = Properties.Resources.mainIcon,
-            };
-
-            ContextMenu c = new ContextMenu();
-            c.MenuItems.Add("Block Now");
-            c.MenuItems[0].Click += MenuStrip0_Click;
-            c.MenuItems.Add("-");
-            c.MenuItems.Add("About");
-            c.MenuItems[2].Click += MenuStrip2_Click;
-            c.MenuItems.Add("Exit");
-            c.MenuItems[3].Click += MenuStrip1_Click;
-            myNotifyIcon.ContextMenu = c;
-            myNotifyIcon.MouseDoubleClick += myNotifyIcon_MouseDoubleClick;
-            notifyIconCreated = myNotifyIcon.Visible = true;
         }
 
         private void MenuStrip2_Click(object sender, EventArgs e)
@@ -83,11 +57,11 @@ namespace InputBlocker
             myAbout.Show();
         }
 
-        void myNotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        public void myNotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             Show();
             WindowState = FormWindowState.Normal;
-            myNotifyIcon.Visible = false;
+            myNotifyIcon.HideNotifyIcon();
         }
 
         private void MenuStrip1_Click(object sender, EventArgs e)
